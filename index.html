@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Omkar Tralsawala — SDE-3 · Data OS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+html{background:#060B11}
+body{margin:0;background:#060B11}
+::selection{background:#00E5FF;color:#041016}
+@keyframes dpls{0%,100%{opacity:.4}50%{opacity:1}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="font-family:'Space Grotesk',system-ui,sans-serif;color:#E2F1F8;min-height:100vh;overflow-x:hidden;position:relative">
+
+  <!-- ===== fixed abstract data-network backdrop (z-index behind everything) ===== -->
+  <sc-if value="{{ showNetwork }}" hint-placeholder-val="{{ true }}">
+    <x-import component-from-global-scope="data-network" from="./data-network.js" accent="#00E5FF" secondary="#008899" bg="#060B11" density="1" style="position:fixed;inset:0;z-index:0;pointer-events:none" hint-size="100%,100%"></x-import>
+  </sc-if>
+  <!-- vignette so UI text always reads over the network -->
+  <div style="position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 120% 80% at 50% 40%,transparent 40%,rgba(6,11,17,.55) 100%)"></div>
+  <!-- slim scroll-progress line (works on every screen size) -->
+  <div data-topbar style="position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);transform-origin:left;background:var(--ac,#00E5FF);box-shadow:0 0 10px var(--ac,#00E5FF);z-index:45;pointer-events:none;opacity:.85"></div>
+
+  <!-- ===== HUD chrome ===== -->
+  <div style="position:fixed;top:14px;left:14px;width:26px;height:26px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);z-index:40;pointer-events:none"></div>
+  <div style="position:fixed;top:14px;right:14px;width:26px;height:26px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);z-index:40;pointer-events:none"></div>
+  <div style="position:fixed;bottom:14px;left:14px;width:26px;height:26px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);z-index:40;pointer-events:none"></div>
+  <div style="position:fixed;bottom:14px;right:14px;width:26px;height:26px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent);z-index:40;pointer-events:none"></div>
+
+  <div style="position:fixed;top:20px;left:52px;z-index:40;display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#008899">
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--ac,#00E5FF);box-shadow:0 0 10px var(--ac,#00E5FF);animation:dpls 2s ease-in-out infinite"></span>
+    <span style="color:#E2F1F8">OMKAR.OS</span><span>// DATA-SYS v4.0</span>
+  </div>
+  <div style="position:fixed;bottom:20px;left:52px;z-index:40;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#008899">LAT 18.5204 N · LON 73.8567 E · PUNE.IN</div>
+
+  <!-- right rail nav -->
+  <div data-rail style="position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:18px">
+    <a href="#top" style="display:flex;align-items:center;gap:9px;text-decoration:none"><span data-navlabel style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#cfe7ef;opacity:0;transform:translateX(8px);pointer-events:none;background:rgba(6,11,17,.82);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);white-space:nowrap;transition:opacity .25s,transform .25s,border-color .25s,color .25s">INTRO</span><span data-navdot style="width:8px;height:8px;border-radius:50%;border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);background:transparent;display:block;transition:width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1),border-radius .3s,background .25s,box-shadow .25s,border-color .25s"></span></a>
+    <a href="#exp" style="display:flex;align-items:center;gap:9px;text-decoration:none"><span data-navlabel style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#cfe7ef;opacity:0;transform:translateX(8px);pointer-events:none;background:rgba(6,11,17,.82);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);white-space:nowrap;transition:opacity .25s,transform .25s,border-color .25s,color .25s">EXPERIENCE</span><span data-navdot style="width:8px;height:8px;border-radius:50%;border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);background:transparent;display:block;transition:width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1),border-radius .3s,background .25s,box-shadow .25s,border-color .25s"></span></a>
+    <a href="#proj" style="display:flex;align-items:center;gap:9px;text-decoration:none"><span data-navlabel style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#cfe7ef;opacity:0;transform:translateX(8px);pointer-events:none;background:rgba(6,11,17,.82);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);white-space:nowrap;transition:opacity .25s,transform .25s,border-color .25s,color .25s">PROJECTS</span><span data-navdot style="width:8px;height:8px;border-radius:50%;border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);background:transparent;display:block;transition:width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1),border-radius .3s,background .25s,box-shadow .25s,border-color .25s"></span></a>
+    <a href="#skills" style="display:flex;align-items:center;gap:9px;text-decoration:none"><span data-navlabel style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#cfe7ef;opacity:0;transform:translateX(8px);pointer-events:none;background:rgba(6,11,17,.82);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);white-space:nowrap;transition:opacity .25s,transform .25s,border-color .25s,color .25s">SKILLS</span><span data-navdot style="width:8px;height:8px;border-radius:50%;border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);background:transparent;display:block;transition:width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1),border-radius .3s,background .25s,box-shadow .25s,border-color .25s"></span></a>
+    <a href="#contact" style="display:flex;align-items:center;gap:9px;text-decoration:none"><span data-navlabel style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#cfe7ef;opacity:0;transform:translateX(8px);pointer-events:none;background:rgba(6,11,17,.82);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);white-space:nowrap;transition:opacity .25s,transform .25s,border-color .25s,color .25s">CONTACT</span><span data-navdot style="width:8px;height:8px;border-radius:50%;border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);background:transparent;display:block;transition:width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1),border-radius .3s,background .25s,box-shadow .25s,border-color .25s"></span></a>
+  </div>
+
+  <!-- variant switcher -->
+  <div data-switch style="position:fixed;bottom:16px;right:52px;z-index:40;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;padding:7px 10px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;backdrop-filter:blur(8px);max-width:calc(100vw - 32px)">
+    <span style="color:#008899">variant:</span>
+    <a href="Portfolio 1A Terminal.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">1a</a>
+    <a href="Portfolio 1B HUD.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">1b</a>
+    <a href="Portfolio 1C Editorial.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">1c</a>
+    <a href="Portfolio 2A Terminal 3D.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">2a</a>
+    <a href="Portfolio 2B HUD 3D.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">2b</a>
+    <span style="padding:2px 8px;background:var(--ac,#00E5FF);color:#041016;font-weight:700;border-radius:4px">3</span>
+  </div>
+
+  <!-- ===== scrollable UI layer over the 3D canvas ===== -->
+  <div style="position:relative;z-index:10">
+
+  <!-- ============ HERO — visible at frame 0 ============ -->
+  <section id="top" data-screen-label="Hero" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 64px 60px;position:relative">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.28em;color:var(--ac,#00E5FF)">// SENIOR SOFTWARE ENGINEER · DATA SYSTEMS</div>
+    <h1 style="margin:22px 0 0;font-size:clamp(42px,8vw,116px);line-height:.98;letter-spacing:-.02em;font-weight:700;color:#E2F1F8;text-shadow:0 0 46px color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent)">OMKAR TRALSAWALA</h1>
+    <div style="margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:clamp(11.5px,1.4vw,14px);letter-spacing:.18em;color:#7fa6b5">SDE-3 @ HIGHLEVEL — PAYMENTS PLATFORM · TYPESCRIPT → GO MIGRATIONS · DISTRIBUTED SYSTEMS</div>
+    <div style="margin-top:46px;display:flex;flex-wrap:wrap;justify-content:center;gap:14px">
+      <div style="min-width:150px;padding:16px 20px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);backdrop-filter:blur(8px)">
+        <div style="font-size:28px;font-weight:700;color:var(--ac,#00E5FF)"><span data-count="6" data-suffix="+">6+</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#008899;margin-top:5px">YEARS ACTIVE</div>
+      </div>
+      <div style="min-width:150px;padding:16px 20px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);backdrop-filter:blur(8px)">
+        <div style="font-size:28px;font-weight:700;color:var(--ac,#00E5FF)">MILLIONS</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#008899;margin-top:5px">RECORDS / DAY</div>
+      </div>
+      <div style="min-width:150px;padding:16px 20px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);backdrop-filter:blur(8px)">
+        <div style="font-size:28px;font-weight:700;color:var(--ac,#00E5FF)">~<span data-count="30" data-suffix="%">30%</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#008899;margin-top:5px">LATENCY REDUCTION · PROFILING</div>
+      </div>
+      <div style="min-width:150px;padding:16px 20px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);backdrop-filter:blur(8px)">
+        <div style="font-size:28px;font-weight:700;color:var(--ac,#00E5FF)">0</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#008899;margin-top:5px">DOWNTIME MIGRATIONS</div>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#008899;animation:dpls 2.4s ease-in-out infinite">SCROLL TO TRAVERSE NETWORK ↓</div>
+  </section>
+
+  <!-- ============ EXPERIENCE / MISSION LOG ============ -->
+  <section id="exp" data-screen-label="Experience" style="max-width:1080px;margin:0 auto;padding:120px 24px 60px;position:relative">
+    <div data-rv style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;color:var(--ac,#00E5FF);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">[ 01 // CAREER ]</div>
+    <h2 data-rv data-d="80" data-scr="MISSION LOG" style="margin:14px 0 60px;font-size:clamp(30px,4.4vw,54px);font-weight:700;letter-spacing:-.01em;color:#E2F1F8;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">MISSION LOG</h2>
+
+    <div style="position:relative;padding-left:38px">
+      <div style="position:absolute;left:10px;top:6px;bottom:6px;width:1px;background:color-mix(in oklab,var(--ac,#00E5FF) 18%,transparent)"></div>
+      <div data-mline style="position:absolute;left:10px;top:6px;width:1px;height:0%;background:linear-gradient(180deg,var(--ac,#00E5FF),color-mix(in oklab,var(--ac,#00E5FF) 40%,transparent));box-shadow:0 0 8px color-mix(in oklab,var(--ac,#00E5FF) 60%,transparent)"></div>
+
+      <div data-rv style="position:relative;margin-bottom:34px;padding:24px 26px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 26%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <span style="position:absolute;left:-33px;top:30px;width:11px;height:11px;border-radius:50%;background:var(--ac,#00E5FF);box-shadow:0 0 14px var(--ac,#00E5FF)"></span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between">
+          <div style="font-size:22px;font-weight:700;color:#E2F1F8">HighLevel <span style="font-size:14px;font-weight:400;color:#7fa6b5">— SDE-3</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--ac,#00E5FF);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);border-radius:20px;padding:3px 12px">APR 2026 — ACTIVE</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#008899;margin-top:6px">AUSTIN, TX · REMOTE</div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.65;color:rgba(226,241,248,.78);max-width:740px">
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Migrating a high-volume payments system from <span style="color:#E2F1F8">TypeScript → Golang</span> under compliance constraints.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Built a reconciliation worker resolving <span style="color:#E2F1F8">long-pending ACH transactions</span>.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Leading the <span style="color:#E2F1F8">Stripe migration utility</span> for the payments platform.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Driving team initiatives in <span style="color:var(--ac,#00E5FF)">agentic development</span> — AI-assisted engineering.</div>
+        </div>
+      </div>
+
+      <div data-rv style="position:relative;margin-bottom:34px;padding:24px 26px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 20%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <span style="position:absolute;left:-33px;top:30px;width:9px;height:9px;border-radius:50%;border:1px solid var(--ac,#00E5FF);background:#060B11"></span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between">
+          <div style="font-size:22px;font-weight:700;color:#E2F1F8">ConnectWise <span style="font-size:14px;font-weight:400;color:#7fa6b5">— Senior Software Engineer I</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#7fa6b5;border:1px solid rgba(0,136,153,.35);border-radius:20px;padding:3px 12px">AUG 2023 — MAR 2026</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#008899;margin-top:6px">PUNE, IN</div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.65;color:rgba(226,241,248,.78);max-width:740px">
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> High-throughput Golang microservices in distributed systems — <span style="color:#E2F1F8">millions of records</span> flowing through raw AWS &amp; GCP deployment pipelines.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Led a critical data-migration module — deployed with <span style="color:#E2F1F8">zero downtime</span>.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> CPU/memory profiling with Go tooling → up to <span style="color:#E2F1F8">30% latency improvement</span>.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> P0–P3 incident response with Product/QA/DevOps under SLA.</div>
+        </div>
+      </div>
+
+      <div data-rv style="position:relative;margin-bottom:34px;padding:24px 26px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 20%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <span style="position:absolute;left:-33px;top:30px;width:9px;height:9px;border-radius:50%;border:1px solid var(--ac,#00E5FF);background:#060B11"></span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between">
+          <div style="font-size:22px;font-weight:700;color:#E2F1F8">Zipdate <span style="font-size:14px;font-weight:400;color:#7fa6b5">— Full Stack Developer</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#7fa6b5;border:1px solid rgba(0,136,153,.35);border-radius:20px;padding:3px 12px">AUG 2022 — JUL 2023</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#008899;margin-top:6px">GOLANG · GCP CLOUD RUN</div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.65;color:rgba(226,241,248,.78);max-width:740px">
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Golang microservices on <span style="color:#E2F1F8">GCP Cloud Run &amp; App Engine</span> — scalable, containerized backends.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Led a real-time <span style="color:#E2F1F8">Notification System &amp; API Gateway</span> — async Pub/Sub messaging delivering to thousands of users.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Built a <span style="color:#E2F1F8">React + Firebase</span> admin dashboard for real-time analytics &amp; system monitoring.</div>
+        </div>
+      </div>
+
+      <div data-rv style="position:relative;margin-bottom:34px;padding:24px 26px;border-radius:12px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 20%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <span style="position:absolute;left:-33px;top:30px;width:9px;height:9px;border-radius:50%;border:1px solid var(--ac,#00E5FF);background:#060B11"></span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between">
+          <div style="font-size:22px;font-weight:700;color:#E2F1F8">Edith Autotech <span style="font-size:14px;font-weight:400;color:#7fa6b5">— Flutter &amp; MERN Stack Developer</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#7fa6b5;border:1px solid rgba(0,136,153,.35);border-radius:20px;padding:3px 12px">AUG 2019 — MAY 2022</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#008899;margin-top:6px">PUNE, IN</div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.65;color:rgba(226,241,248,.78);max-width:740px">
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Full-stack across <span style="color:#E2F1F8">Flutter, NodeJS &amp; Golang</span> — mobile, web and services, end-to-end.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Architected backends for <span style="color:#E2F1F8">smart waste management</span> &amp; <span style="color:#E2F1F8">IoT beer dispensers</span> — event-driven microservices on cloud APIs handling real-time sensor data.</div>
+          <div><span style="color:var(--ac,#00E5FF)">▸</span> Built <span style="color:#E2F1F8">GCP serverless analytics dashboards</span> for industrial automation &amp; factory monitoring — see <a href="#proj" style="color:var(--ac,#00E5FF)">payloads ↓</a></div>
+        </div>
+      </div>
+
+      <div data-rv style="position:relative;padding:18px 26px;border-radius:12px;border:1px dashed rgba(0,136,153,.3);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <span style="position:absolute;left:-33px;top:24px;width:9px;height:9px;border-radius:50%;border:1px solid #008899;background:#060B11"></span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between">
+          <div style="font-size:16px;font-weight:500;color:#7fa6b5">Felix-IT Systems — iOS App Developer</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#008899">JAN — JUL 2018 · LAUNCH PAD</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS / PAYLOADS ============ -->
+  <section id="proj" data-screen-label="Projects" style="max-width:1080px;margin:0 auto;padding:120px 24px 60px">
+    <div data-rv style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;color:var(--ac,#00E5FF);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">[ 02 // SELECTED WORK ]</div>
+    <h2 data-rv data-d="80" data-scr="PAYLOADS" style="margin:14px 0 52px;font-size:clamp(30px,4.4vw,54px);font-weight:700;letter-spacing:-.01em;color:#E2F1F8;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">PAYLOADS</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+
+      <div data-rv data-tilt style="position:relative;padding:26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .8s ease,transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;will-change:transform" style-hover="border-color:color-mix(in oklab,var(--ac,#00E5FF) 60%,transparent);box-shadow:0 14px 50px color-mix(in oklab,var(--ac,#00E5FF) 16%,transparent)">
+        <span style="position:absolute;top:10px;left:10px;width:16px;height:16px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <span style="position:absolute;bottom:10px;right:10px;width:16px;height:16px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ac,#00E5FF)">PL-01 · PUBLISHED RESEARCH</div>
+        <div style="margin-top:10px;font-size:21px;font-weight:700;color:#E2F1F8">Face Off Zombie</div>
+        <div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:rgba(226,241,248,.78)">Augmented-reality zombie game, published as a research paper — real-time AR interaction and game systems.</div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7fa6b5"><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">AR</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">UNITY3D</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">VUFORIA</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">PAPER</span></div>
+      </div>
+
+      <div data-rv data-d="70" data-tilt style="position:relative;padding:26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .8s ease,transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;will-change:transform" style-hover="border-color:color-mix(in oklab,var(--ac,#00E5FF) 60%,transparent);box-shadow:0 14px 50px color-mix(in oklab,var(--ac,#00E5FF) 16%,transparent)">
+        <span style="position:absolute;top:10px;left:10px;width:16px;height:16px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <span style="position:absolute;bottom:10px;right:10px;width:16px;height:16px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ac,#00E5FF)">PL-02 · HOSPITALITY IOT</div>
+        <div style="margin-top:10px;font-size:21px;font-weight:700;color:#E2F1F8">Beer On Tap</div>
+        <div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:rgba(226,241,248,.78)">Pour &amp; transaction events stream from IoT dispensing units into a validating ingestion API backed by durable queues. Device telemetry routes through backend fan-out workers into real-time monitoring and usage analytics.</div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7fa6b5"><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">IOT</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">REALTIME</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">APIS</span></div>
+      </div>
+
+      <div data-rv data-d="140" data-tilt style="position:relative;padding:26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .8s ease,transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;will-change:transform" style-hover="border-color:color-mix(in oklab,var(--ac,#00E5FF) 60%,transparent);box-shadow:0 14px 50px color-mix(in oklab,var(--ac,#00E5FF) 16%,transparent)">
+        <span style="position:absolute;top:10px;left:10px;width:16px;height:16px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <span style="position:absolute;bottom:10px;right:10px;width:16px;height:16px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ac,#00E5FF)">PL-03 · REAL-TIME MESSAGING</div>
+        <div style="margin-top:10px;font-size:21px;font-weight:700;color:#E2F1F8">Notification &amp; API Gateway</div>
+        <div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:rgba(226,241,248,.78)">Real-time notification system and API gateway with asynchronous Pub/Sub messaging, delivering to thousands of users — fronted by a React + Firebase analytics dashboard.</div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7fa6b5"><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">PUB/SUB</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">API GATEWAY</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">REACT</span></div>
+      </div>
+
+      <div data-rv data-d="210" data-tilt style="position:relative;padding:26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .8s ease,transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;will-change:transform" style-hover="border-color:color-mix(in oklab,var(--ac,#00E5FF) 60%,transparent);box-shadow:0 14px 50px color-mix(in oklab,var(--ac,#00E5FF) 16%,transparent)">
+        <span style="position:absolute;top:10px;left:10px;width:16px;height:16px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <span style="position:absolute;bottom:10px;right:10px;width:16px;height:16px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ac,#00E5FF)">PL-04 · DIGITAL INDIA</div>
+        <div style="margin-top:10px;font-size:21px;font-weight:700;color:#E2F1F8">Patan Waste Management</div>
+        <div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:rgba(226,241,248,.78)">QR-code civic platform for municipal waste operations — ingestion, processing and reporting for authorities.</div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7fa6b5"><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">CIVIC TECH</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">DATA</span></div>
+      </div>
+
+      <div data-rv data-d="280" data-tilt style="position:relative;padding:26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .8s ease,transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;will-change:transform" style-hover="border-color:color-mix(in oklab,var(--ac,#00E5FF) 60%,transparent);box-shadow:0 14px 50px color-mix(in oklab,var(--ac,#00E5FF) 16%,transparent)">
+        <span style="position:absolute;top:10px;left:10px;width:16px;height:16px;border-top:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-left:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <span style="position:absolute;bottom:10px;right:10px;width:16px;height:16px;border-bottom:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent);border-right:1px solid color-mix(in oklab,var(--ac,#00E5FF) 50%,transparent)"></span>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ac,#00E5FF)">PL-05 · INDUSTRIAL</div>
+        <div style="margin-top:10px;font-size:21px;font-weight:700;color:#E2F1F8">Production Analytics</div>
+        <div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:rgba(226,241,248,.78)">Machine-utilization events are ingested from industrial workflows into staged pipelines that clean, window and aggregate metrics. Aggregates route through a reporting layer surfacing bottleneck and efficiency insights for operations.</div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7fa6b5"><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">PIPELINES</span><span style="border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:2px 10px">ANALYTICS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS / SYSTEMS ============ -->
+  <section id="skills" data-screen-label="Skills" style="max-width:1080px;margin:0 auto;padding:120px 24px 60px">
+    <div data-rv style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;color:var(--ac,#00E5FF);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">[ 03 // CAPABILITIES ]</div>
+    <h2 data-rv data-d="80" data-scr="SYSTEMS ONLINE" style="margin:14px 0 52px;font-size:clamp(30px,4.4vw,54px);font-weight:700;letter-spacing:-.01em;color:#E2F1F8;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">SYSTEMS ONLINE</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px">
+
+      <div data-rv style="padding:24px 26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.22em;color:#008899;margin-bottom:20px">LANG &amp; RUNTIME</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>Golang</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">11/12</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--ac,#00E5FF);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 35%,transparent);border-radius:4px;padding:2px 7px">GRPC</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--ac,#00E5FF);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 35%,transparent);border-radius:4px;padding:2px 7px">GO INTERNALS · CONCURRENCY</span></div>
+            <div data-meter="11" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>Python</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">11/12</span></div>
+            <div data-meter="11" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>Node.js / JavaScript</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">9/12</span></div>
+            <div data-meter="9" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div data-rv data-d="90" style="padding:24px 26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.22em;color:#008899;margin-bottom:20px">DATA SYSTEMS</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>Pipelines / ETL</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">11/12</span></div>
+            <div data-meter="11" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>MongoDB / NoSQL</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">10/12</span></div>
+            <div data-meter="10" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>SQL / Relational</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">9/12</span></div>
+            <div data-meter="9" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div data-rv data-d="180" style="padding:24px 26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.22em;color:#008899;margin-bottom:20px">CLOUD &amp; SCALE</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>Microservices / Distributed</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">11/12</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--ac,#00E5FF);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 35%,transparent);border-radius:4px;padding:2px 7px">WORKER POOL PATTERNS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--ac,#00E5FF);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 35%,transparent);border-radius:4px;padding:2px 7px">GRPC</span></div>
+            <div data-meter="11" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>AWS</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">10/12</span></div>
+            <div data-meter="10" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#E2F1F8;margin-bottom:7px"><span>GCP</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7fa6b5">10/12</span></div>
+            <div data-meter="10" style="display:flex;gap:3px"><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:var(--ac,#00E5FF)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span><span style="flex:1;height:9px;border-radius:2px;background:rgba(0,136,153,.22)"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div data-rv data-d="240" style="padding:24px 26px;border-radius:14px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 40%,transparent);backdrop-filter:blur(8px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.22em;color:var(--ac,#00E5FF);margin-bottom:18px">UPGRADING · ML/AI</div>
+        <div style="font-size:15px;line-height:1.65;color:rgba(226,241,248,.8)">MSc in <span style="color:#E2F1F8">AI &amp; Machine Learning</span>. Liverpool John Moores University + IIIT Bangalore.</div>
+        <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--ac,#00E5FF)">MAY 2025 — APR 2027 · IN PROGRESS</div>
+        <div style="margin-top:16px;border-top:1px solid rgba(0,136,153,.2);padding-top:16px;display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:#7fa6b5">
+          <div><span style="color:var(--ac,#00E5FF);font-family:'IBM Plex Mono',monospace;font-size:10px">[CERT]</span> MongoDB — Node.js Learning Path (Mongo University)</div>
+          <div><span style="color:var(--ac,#00E5FF);font-family:'IBM Plex Mono',monospace;font-size:10px">[CERT]</span> NodeJS Bootcamp · Flutter Bootcamp (Udemy)</div>
+          <div><span style="color:var(--ac,#00E5FF);font-family:'IBM Plex Mono',monospace;font-size:10px">[EDU]</span> B.Tech IT — Symbiosis International University, 2015–19 · Merit</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" data-screen-label="Contact" style="max-width:1080px;margin:0 auto;padding:120px 24px 100px">
+    <div data-rv style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;color:var(--ac,#00E5FF);text-align:center;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">[ 04 // TRANSMISSION ]</div>
+    <h2 data-rv data-d="80" data-scr="OPEN CHANNEL" style="margin:14px 0 40px;font-size:clamp(30px,4.4vw,54px);font-weight:700;letter-spacing:-.01em;color:#E2F1F8;text-align:center;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">OPEN CHANNEL</h2>
+    <div data-rv data-d="160" style="max-width:720px;margin:0 auto;padding:44px 30px;border-radius:16px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);backdrop-filter:blur(8px);text-align:center;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:#008899">&gt; ESTABLISHING SECURE LINK… OK</div>
+      <a href="mailto:omkar.tralsawala@gmail.com" style="display:inline-block;margin-top:18px;font-size:clamp(19px,3.4vw,34px);font-weight:700;color:#E2F1F8;text-decoration:none;border-bottom:2px solid var(--ac,#00E5FF);padding-bottom:6px;text-shadow:0 0 30px color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);transition:color .25s" style-hover="color:var(--ac,#00E5FF)">omkar.tralsawala@gmail.com</a>
+      <div style="margin-top:28px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em">
+        <a href="https://www.linkedin.com/in/omkar-tralsawala/" target="_blank" style="color:rgba(226,241,248,.82);text-decoration:none;border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:7px 16px;transition:border-color .25s,color .25s" style-hover="color:var(--ac,#00E5FF);border-color:var(--ac,#00E5FF)">LINKEDIN ↗</a>
+        <a href="tel:+919970680668" style="color:rgba(226,241,248,.82);text-decoration:none;border:1px solid rgba(0,136,153,.4);border-radius:20px;padding:7px 16px;transition:border-color .25s,color .25s" style-hover="color:var(--ac,#00E5FF);border-color:var(--ac,#00E5FF)">+91 99706 80668</a>
+        <span style="color:#008899;border:1px solid rgba(0,136,153,.25);border-radius:20px;padding:7px 16px">PUNE ⇄ AUSTIN</span>
+      </div>
+    </div>
+    <div style="margin-top:80px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;color:#008899">TRANSMISSION END · © 2026 OMKAR TRALSAWALA</div>
+  </section>
+
+  </div><!-- /UI layer -->
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#38BDF8&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#00E5FF&quot;,&quot;#22D3EE&quot;,&quot;#38BDF8&quot;,&quot;#5EEAD4&quot;],&quot;section&quot;:&quot;Theme&quot;},&quot;showNetwork&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Effects&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rootRef: (el) => { this.root = el; },
+      showNetwork: this.props.showNetwork ?? true
+    };
+  }
+
+  componentDidMount() {
+    this._shown = new WeakSet();
+    this._scrambled = new WeakSet();
+    this.boot();
+  }
+
+  componentDidUpdate() { this.applyTheme(); }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this._raf);
+    if (this._io) this._io.disconnect();
+    if (this._applyResponsive) window.removeEventListener('resize', this._applyResponsive);
+  }
+
+  applyTheme() {
+    if (this.root) this.root.style.setProperty('--ac', this.props.accent || '#00E5FF');
+  }
+
+  boot() {
+    if (!this.root) return;
+    this.applyTheme();
+    const els = Array.from(this.root.querySelectorAll('[data-rv]'));
+    els.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top > innerHeight * 0.92) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(18px)';
+        el.style.filter = 'blur(4px)';
+        el.querySelectorAll('[data-meter]').forEach((m) => this.paintMeter(m, 0));
+      }
+    });
+    this._io = new IntersectionObserver((ents) => {
+      ents.forEach((e) => { if (e.isIntersecting) this.show(e.target); });
+    }, { threshold: 0.12 });
+    els.forEach((el) => this._io.observe(el));
+    // hero counters fire immediately (visible frame 0)
+    this.root.querySelectorAll('#top [data-count]').forEach((c) => this.count(c));
+    this.root.querySelectorAll('[data-tilt]').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'perspective(700px) rotateX(' + (-y * 7) + 'deg) rotateY(' + (x * 9) + 'deg) translateY(-3px)';
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = 'none'; });
+    });
+    this.smoothAnchors();
+    this.root.querySelectorAll('[data-navdot]').forEach((d) => {
+      const link = d.closest('a');
+      if (!link) return;
+      link.addEventListener('mouseenter', () => { link.dataset.hover = '1'; });
+      link.addEventListener('mouseleave', () => { delete link.dataset.hover; });
+    });
+    this._applyResponsive = () => {
+      if (!this.root) return;
+      const mob = window.matchMedia('(max-width:720px)').matches;
+      const rail = this.root.querySelector('[data-rail]');
+      if (rail) rail.style.display = mob ? 'none' : 'flex';
+      const sw = this.root.querySelector('[data-switch]');
+      if (sw) {
+        sw.style.right = mob ? 'auto' : '52px';
+        sw.style.left = mob ? '50%' : 'auto';
+        sw.style.transform = mob ? 'translateX(-50%)' : 'none';
+        sw.style.bottom = mob ? '12px' : '16px';
+      }
+    };
+    this._applyResponsive();
+    window.addEventListener('resize', this._applyResponsive);
+    this.loop();
+  }
+
+  smoothAnchors() {
+    this.root.querySelectorAll('a[href^="#"]').forEach((a) => {
+      a.addEventListener('click', (ev) => {
+        const t = this.root.querySelector(a.getAttribute('href'));
+        if (!t) return;
+        ev.preventDefault();
+        const y0 = scrollY;
+        const y1 = t.getBoundingClientRect().top + scrollY - 40;
+        const t0 = performance.now();
+        const dur = 700;
+        const tick = (now) => {
+          const p = Math.min(1, (now - t0) / dur);
+          const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+          window.scrollTo(0, y0 + (y1 - y0) * e);
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    });
+  }
+
+  show(el) {
+    if (this._shown.has(el)) return;
+    this._shown.add(el);
+    const d = parseInt(el.dataset.d || '0', 10);
+    setTimeout(() => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.style.filter = 'none';
+      el.querySelectorAll('[data-count]').forEach((c) => this.count(c));
+      el.querySelectorAll('[data-meter]').forEach((m) => this.animateMeter(m));
+      const scrEls = el.matches('[data-scr]') ? [el] : Array.from(el.querySelectorAll('[data-scr]'));
+      scrEls.forEach((s) => this.scramble(s));
+    }, d);
+  }
+
+  paintMeter(m, n) {
+    const cells = Array.from(m.children);
+    cells.forEach((cell, i) => {
+      if (i < n) {
+        cell.style.background = 'var(--ac,#00E5FF)';
+        cell.style.boxShadow = '0 0 7px color-mix(in oklab,var(--ac,#00E5FF) 55%,transparent)';
+      } else {
+        cell.style.background = 'rgba(0,136,153,.22)';
+        cell.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  animateMeter(m) {
+    if (m.dataset.done) return;
+    m.dataset.done = '1';
+    const target = parseInt(m.dataset.meter || '0', 10);
+    let n = 0;
+    const iv = setInterval(() => {
+      n++;
+      this.paintMeter(m, n);
+      if (n >= target) clearInterval(iv);
+    }, 55);
+  }
+
+  count(c) {
+    if (c.dataset.counted) return;
+    c.dataset.counted = '1';
+    const target = parseFloat(c.dataset.count) || 0;
+    const suffix = c.dataset.suffix || '';
+    const t0 = performance.now();
+    const dur = 1100;
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      c.textContent = Math.round(target * e) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  scramble(el) {
+    if (this._scrambled.has(el) || el.dataset.scrDone) return;
+    this._scrambled.add(el);
+    el.dataset.scrDone = '1';
+    const final = el.dataset.scr || el.textContent;
+    const CH = '01<>/\\[]{}=+*#';
+    let f = 0;
+    const total = Math.max(16, Math.round(final.length * 1.3));
+    const iv = setInterval(() => {
+      f++;
+      let out = '';
+      for (let i = 0; i < final.length; i++) {
+        const ch = final[i];
+        if (ch === ' ') { out += ' '; continue; }
+        const lock = (i / final.length) * total * 0.82;
+        out += f > lock ? ch : CH[(Math.random() * CH.length) | 0];
+      }
+      el.textContent = out;
+      if (f >= total) { el.textContent = final; clearInterval(iv); }
+    }, 28);
+  }
+
+  loop() {
+    const step = () => {
+      this._raf = requestAnimationFrame(step);
+      if (!this.root) return;
+      this._rvf = (this._rvf || 0) + 1;
+      if (this._rvf % 12 === 0 && this._shown) {
+        this.root.querySelectorAll('[data-rv]').forEach((el) => {
+          if (!this._shown.has(el) && el.getBoundingClientRect().top < innerHeight * 0.9) this.show(el);
+        });
+      }
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+
+      const tb = this.root.querySelector('[data-topbar]');
+      if (tb) tb.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+
+      const pp = this.root.querySelector('[data-ppct]');
+      if (pp) {
+        const txt = String(Math.round(p * 100)).padStart(3, '0') + '%';
+        if (pp.textContent !== txt) pp.textContent = txt;
+      }
+      this._sec = (this._sec || 0) + 1;
+      if (this._sec % 30 === 0) {
+        const tm = this.root.querySelector('[data-time]');
+        if (tm) tm.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
+      }
+
+      const exp = this.root.querySelector('#exp');
+      const ml = this.root.querySelector('[data-mline]');
+      if (exp && ml) {
+        const r = exp.getBoundingClientRect();
+        const prog = Math.min(1, Math.max(0, (innerHeight * 0.75 - r.top) / r.height));
+        ml.style.height = (prog * 100) + '%';
+      }
+
+      const dots = Array.from(this.root.querySelectorAll('[data-navdot]'));
+      if (dots.length) {
+        let active = 0;
+        dots.forEach((d, i) => {
+          const link = d.closest('a') || d;
+          const id = (link.getAttribute('href') || '#').slice(1);
+          const sec = this.root.querySelector('#' + id);
+          if (sec && sec.getBoundingClientRect().top < innerHeight * 0.5) active = i;
+        });
+        dots.forEach((d, i) => {
+          const link = d.closest('a') || d;
+          const label = link.querySelector('[data-navlabel]');
+          const on = link.dataset.hover === '1';
+          if (i === active) {
+            d.style.width = '3px'; d.style.height = '22px'; d.style.borderRadius = '3px';
+            d.style.background = 'var(--ac,#00E5FF)';
+            d.style.borderColor = 'transparent';
+            d.style.boxShadow = '0 0 10px var(--ac,#00E5FF)';
+          } else {
+            d.style.width = '8px'; d.style.height = '8px'; d.style.borderRadius = '50%';
+            d.style.background = 'transparent';
+            d.style.borderColor = 'color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent)';
+            d.style.boxShadow = 'none';
+          }
+          if (label) {
+            label.style.opacity = on ? '1' : '0';
+            label.style.transform = on ? 'translateX(0)' : 'translateX(8px)';
+            label.style.color = (i === active) ? 'var(--ac,#00E5FF)' : '#cfe7ef';
+            label.style.borderColor = on ? 'color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent)' : 'color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent)';
+          }
+        });
+      }
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+}
+</script>
+</body>
+</html>
