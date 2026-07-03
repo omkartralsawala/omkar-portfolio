@@ -53,17 +53,6 @@ body{margin:0;background:#060B11}
     <a href="#contact" style="display:flex;align-items:center;gap:9px;text-decoration:none"><span data-navlabel style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#cfe7ef;opacity:0;transform:translateX(8px);pointer-events:none;background:rgba(6,11,17,.82);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 22%,transparent);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px);white-space:nowrap;transition:opacity .25s,transform .25s,border-color .25s,color .25s">CONTACT</span><span data-navdot style="width:8px;height:8px;border-radius:50%;border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 45%,transparent);background:transparent;display:block;transition:width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1),border-radius .3s,background .25s,box-shadow .25s,border-color .25s"></span></a>
   </div>
 
-  <!-- variant switcher -->
-  <div data-switch style="position:fixed;bottom:16px;right:52px;z-index:40;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;padding:7px 10px;background:rgba(10,19,28,.85);border:1px solid color-mix(in oklab,var(--ac,#00E5FF) 30%,transparent);border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;backdrop-filter:blur(8px);max-width:calc(100vw - 32px)">
-    <span style="color:#008899">variant:</span>
-    <a href="Portfolio 1A Terminal.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">1a</a>
-    <a href="Portfolio 1B HUD.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">1b</a>
-    <a href="Portfolio 1C Editorial.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">1c</a>
-    <a href="Portfolio 2A Terminal 3D.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">2a</a>
-    <a href="Portfolio 2B HUD 3D.dc.html" style="padding:2px 8px;color:#7fa6b5;text-decoration:none;border:1px solid rgba(0,136,153,.45);border-radius:4px" style-hover="color:#E2F1F8;border-color:#E2F1F8">2b</a>
-    <span style="padding:2px 8px;background:var(--ac,#00E5FF);color:#041016;font-weight:700;border-radius:4px">3</span>
-  </div>
-
   <!-- ===== scrollable UI layer over the 3D canvas ===== -->
   <div style="position:relative;z-index:10">
 
@@ -385,13 +374,6 @@ class Component extends DCLogic {
       const mob = window.matchMedia('(max-width:720px)').matches;
       const rail = this.root.querySelector('[data-rail]');
       if (rail) rail.style.display = mob ? 'none' : 'flex';
-      const sw = this.root.querySelector('[data-switch]');
-      if (sw) {
-        sw.style.right = mob ? 'auto' : '52px';
-        sw.style.left = mob ? '50%' : 'auto';
-        sw.style.transform = mob ? 'translateX(-50%)' : 'none';
-        sw.style.bottom = mob ? '12px' : '16px';
-      }
     };
     this._applyResponsive();
     window.addEventListener('resize', this._applyResponsive);
